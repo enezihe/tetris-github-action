@@ -2,6 +2,11 @@ provider "azurerm" {
   features {}
 }
 
+provider "github" {
+ token = file("githubtoken.txt")
+}
+
+
 terraform {
   backend "azurerm" {
     resource_group_name  = "sshkey"
@@ -39,5 +44,15 @@ resource "azurerm_linux_web_app" "example" {
   service_plan_id     = azurerm_service_plan.example.id
 
   site_config {}
+}
+
+resource "github_actions_secret" "example_secret" {
+  repository       = "tetris-github_action"
+  secret_name      = "ACR_PASSWORD"
+  plaintext_value  = "${output.acr_password}"
+}
+
+output "acr_password" {
+  value = azurerm_container_registry.acr.admin_password
 }
 

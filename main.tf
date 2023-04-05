@@ -48,7 +48,7 @@ resource "azurerm_linux_web_app" "example" {
 resource "github_actions_secret" "example_secret" {
   repository      = "tetris-github_action"
   secret_name     = "ACR_PASSWORD"
-  plaintext_value = output.acr_password
+  plaintext_value = "${output.acr_password}"
 }
 
 output "acr_password" {

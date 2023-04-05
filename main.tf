@@ -54,6 +54,7 @@ resource "github_actions_secret" "example_secret" {
   ]
 }
 output "acr_password" {
-  value = azurerm_container_registry.acr.admin_password
+  value     = azurerm_container_registry.acr.admin_password
+  sensitive = false
 }
 

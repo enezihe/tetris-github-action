@@ -3,7 +3,6 @@ provider "azurerm" {
 }
 
 provider "github" {
-  token = file("githubtoken.txt")
 }
 
 

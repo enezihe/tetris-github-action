@@ -146,6 +146,8 @@ jobs:
 
     # Terraform Apply
     - name: Terraform Apply
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}    
       run: terraform apply -auto-approve tfplan
 
   build-and-deploy:

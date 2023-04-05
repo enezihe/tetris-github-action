@@ -57,6 +57,9 @@ resource "github_actions_secret" "example_secret" {
   repository      = "tetris-github_action"
   secret_name     = "ACR_PASSWORD"
   plaintext_value = output.acr_password
+  depends_on = [
+    azurerm_container_registry.acr
+  ]
 }
 
 

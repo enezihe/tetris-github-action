@@ -25,7 +25,7 @@ resource "azurerm_container_registry" "acr" {
   resource_group_name = azurerm_resource_group.example.name
   location            = azurerm_resource_group.example.location
   sku                 = "Standard"
-  admin_enabled       = false
+  admin_enabled       = true
 }
 
 resource "azurerm_service_plan" "example" {
@@ -48,7 +48,7 @@ resource "azurerm_linux_web_app" "example" {
 resource "github_actions_secret" "example_secret" {
   repository      = "tetris-github_action"
   secret_name     = "ACR_PASSWORD"
-  plaintext_value = "${output.acr_password}"
+  plaintext_value = output.acr_password
 }
 
 output "acr_password" {

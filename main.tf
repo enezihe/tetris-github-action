@@ -45,13 +45,18 @@ resource "azurerm_linux_web_app" "example" {
   site_config {}
 }
 
+output "acr_password" {
+  value = azurerm_container_registry.acr.admin_password
+  sensitive = true
+  depends_on = [
+    azurerm_container_registry.acr
+  ]
+}
+
 resource "github_actions_secret" "example_secret" {
   repository      = "tetris-github_action"
   secret_name     = "ACR_PASSWORD"
   plaintext_value = output.acr_password
 }
 
-output "acr_password" {
-  value = azurerm_container_registry.acr.admin_password
-}
 

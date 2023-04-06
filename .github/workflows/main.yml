@@ -149,7 +149,7 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: tfplan
-        path: /home/runner/work/_temp/c4e76964-ef02-47c8-abbb-ca5bb9f76ef8/terraform-bin
+        path: infrastructure/
 
     # Terraform Apply
     - name: Terraform Apply

@@ -55,19 +55,19 @@ resource "azurerm_linux_web_app" "app1" {
   site_config {}
 }
 
-resource "github_actions_secret" "example_secret" {
+resource "github_actions_secret" "acr_password" {
   repository      = var.github_repo_name
   secret_name     = "ACR_PASSWORD"
   plaintext_value = azurerm_container_registry.acr.admin_password
 }
 
-resource "github_actions_variable" "example_variable" {
+resource "github_actions_variable" "webapp_name" {
   repository       = var.github_repo_name
   variable_name    = "WEBAPP"
   value            = azurerm_linux_web_app.app1.name
 }
 
-resource "github_actions_variable" "example_variable" {
+resource "github_actions_variable" "rg_name" {
   repository       = var.github_repo_name
   variable_name    = "RESOURCEGROUP"
   value            = azurerm_resource_group.rg1.name

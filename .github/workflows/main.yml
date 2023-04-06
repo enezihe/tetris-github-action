@@ -186,19 +186,19 @@ jobs:
         username: ${{ secrets.ACR_USERNAME }}
         password: ${{ secrets.ACR_PASSWORD }}
         
+    - run: docker build . -t ${{ secrets.ACR_USERNAME }}.azurecr.io/tetris:${{ github.sha }}      
+        
     - uses: nick-fields/retry@v2
       with:
         timeout_seconds: 60
         max_attempts: 3
         retry_on: error
-        run: |
-          docker build . -t ${{ secrets.ACR_USERNAME }}.azurecr.io/tetris:${{ github.sha }}
-          docker push ${{ secrets.ACR_USERNAME }}.azurecr.io/tetris:${{ github.sha }}   
+        command: docker push ${{ secrets.ACR_USERNAME }}.azurecr.io/tetris:${{ github.sha }}   
 
     - name: 'Login via Azure CLI'
       uses: azure/login@v1
       with:
-        creds: ${{ secrets.AZURE_SERVICE_PRINCIPAL }}
+        creds: ${{ secrets.AZURE_SERVICE_PRINCIPAL }} 
         
     - name: 'Set private registry authentication settings'
       run: az webapp config container set --name ${{ vars.WEBAPP }} --resource-group ${{ vars.RESOURCEGROUP }} --docker-registry-server-user ${{ secrets.ACR_USERNAME }} --docker-registry-server-password ${{ secrets.ACR_PASSWORD }}

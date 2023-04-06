@@ -149,13 +149,12 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: tfplan
-        path: /home/runner/work/tetris-github_action/tetris-github_action
+        path: /home/runner/work/_temp/c4e76964-ef02-47c8-abbb-ca5bb9f76ef8/terraform-bin
 
     # Terraform Apply
     - name: Terraform Apply
       env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}  
-      working-directory: ${{ env.working-directory }}
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       run: terraform apply -auto-approve tfplan
 
   build-and-deploy:

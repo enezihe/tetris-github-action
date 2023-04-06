@@ -44,8 +44,8 @@ jobs:
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      run: terraform init
-
+      run: terraform -chdir=infrastructure/ init
+            
     # Checks that all Terraform configuration files adhere to a canonical format
     # Will fail the build if not
     - name: Terraform Format
@@ -58,6 +58,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       run: |
+        cd infrastructure
         export exitcode=0
         terraform plan -lock=false -detailed-exitcode -no-color -out tfplan || export exitcode=$?
 
@@ -136,7 +137,9 @@ jobs:
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      run: terraform init
+      run: |
+            cd infrastructure
+            terraform init
 
     # Download saved plan from artifacts  
     - name: Download Terraform Plan
@@ -148,7 +151,9 @@ jobs:
     - name: Terraform Apply
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}  
-      run: terraform apply -auto-approve tfplan
+      run: |
+            cd infrastructure
+            terraform apply -auto-approve tfplan
 
   build-and-deploy:
     runs-on: ubuntu-latest

@@ -51,7 +51,9 @@ jobs:
     # Checks that all Terraform configuration files adhere to a canonical format
     # Will fail the build if not
     - name: Terraform Format
-      run: terraform fmt -check
+      run: |
+            cd infrastructure
+            terraform fmt -check
 
     # Generates an execution plan for Terraform
     # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
@@ -138,7 +140,9 @@ jobs:
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      run: terraform init
+      run: |
+            cd infrastructure
+            terraform init
 
     # Download saved plan from artifacts  
     - name: Download Terraform Plan
@@ -150,7 +154,9 @@ jobs:
     - name: Terraform Apply
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}  
-      run: terraform apply -auto-approve tfplan
+      run: |
+            cd infrastructure
+            terraform apply -auto-approve tfplan
 
   build-and-deploy:
     runs-on: ubuntu-latest

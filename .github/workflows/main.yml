@@ -162,6 +162,11 @@ jobs:
     runs-on: ubuntu-latest
     needs: [terraform-apply]
     steps:
+    
+    - name: Sleep for 30 seconds
+      run: sleep 30s
+      shell: bash
+    
     - uses: actions/checkout@v3
     
     - uses: azure/docker-login@v1

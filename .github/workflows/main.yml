@@ -149,19 +149,24 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: tfplan
-        path: /home/runner/work/_temp/c4e76964-ef02-47c8-abbb-ca5bb9f76ef8/terraform-bin
+        path: infrastructure/
 
     # Terraform Apply
     - name: Terraform Apply
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       run: terraform apply -auto-approve tfplan
-      working-directory: /home/runner/work/_temp/c4e76964-ef02-47c8-abbb-ca5bb9f76ef8/terraform-bin
+      working-directory: ${{ env.working-directory }}
 
   build-and-deploy:
     runs-on: ubuntu-latest
     needs: [terraform-apply]
     steps:
+    
+    - name: Sleep for 30 seconds
+      run: sleep 30s
+      shell: bash
+    
     - uses: actions/checkout@v3
     
     - uses: azure/docker-login@v1
@@ -179,9 +184,9 @@ jobs:
         creds: ${{ secrets.AZURE_SERVICE_PRINCIPAL }}
         
     - name: 'Set private registry authentication settings'
-      run: az webapp config container set --name ccseyhan-webapp --resource-group test1 --docker-registry-server-user ccseyhan --docker-registry-server-password ${{ secrets.ACR_PASSWORD }}
+      run: az webapp config container set --name ${{ vars.WEBAPP }} --resource-group ${{ vars.RESOURCEGROUP }} --docker-registry-server-user ${{ secrets.ACR_USERNAME }} --docker-registry-server-password ${{ secrets.ACR_PASSWORD }}
       
     - uses: azure/webapps-deploy@v2
       with:
-        app-name: 'ccseyhan-webapp'
+        app-name: '${{ vars.WEBAPP }}'
         images: '${{ secrets.ACR_USERNAME }}.azurecr.io/tetris:${{ github.sha }}'

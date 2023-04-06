@@ -14,11 +14,11 @@ variable "acr_name" {
   default = "ccseyhan"
 }
 
-variable "acr_sku" {
-  description = "The SKU name of the the container registry. Possible values are `Classic` (which was previously `Basic`), `Basic`, `Standard` and `Premium`."
-  type        = string
-  default = "Standart"
-}
+# variable "acr_sku" {
+#   description = "The SKU name of the the container registry. Possible values are `Classic` (which was previously `Basic`), `Basic`, `Standard` and `Premium`."
+#   type        = string
+#   default = "Standart"
+# }
 
 variable "app_service_plan_name" {
   description = "Name of the App Service Plan"

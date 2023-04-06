@@ -192,6 +192,7 @@ jobs:
       with:
         timeout_seconds: 60
         max_attempts: 5
+        retry_wait_seconds: 30
         retry_on: error
         command: docker push ${{ secrets.ACR_USERNAME }}.azurecr.io/tetris:${{ github.sha }}   
 

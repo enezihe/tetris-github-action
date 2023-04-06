@@ -149,6 +149,7 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: tfplan
+        path: /home/runner/work/tetris-github_action/tetris-github_action
 
     # Terraform Apply
     - name: Terraform Apply

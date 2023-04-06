@@ -171,14 +171,30 @@ jobs:
     - uses: actions/checkout@v3
     
     - uses: azure/docker-login@v1
+      continue-on-error: true
+      id: dockerlogin
       with:
         login-server: ${{ secrets.ACR_USERNAME }}.azurecr.io
         username: ${{ secrets.ACR_USERNAME }}
         password: ${{ secrets.ACR_PASSWORD }}
-    - run: |
-        docker build . -t ${{ secrets.ACR_USERNAME }}.azurecr.io/tetris:${{ github.sha }}
-        docker push ${{ secrets.ACR_USERNAME }}.azurecr.io/tetris:${{ github.sha }}   
         
+    
+    - uses: azure/docker-login@v1
+      if: steps.dockerlogin.outcome == 'failure'
+      with:
+        login-server: ${{ secrets.ACR_USERNAME }}.azurecr.io
+        username: ${{ secrets.ACR_USERNAME }}
+        password: ${{ secrets.ACR_PASSWORD }}
+        
+    - uses: nick-fields/retry@v2
+      with:
+        timeout_seconds: 60
+        max_attempts: 3
+        retry_on: error
+        run: |
+          docker build . -t ${{ secrets.ACR_USERNAME }}.azurecr.io/tetris:${{ github.sha }}
+          docker push ${{ secrets.ACR_USERNAME }}.azurecr.io/tetris:${{ github.sha }}   
+
     - name: 'Login via Azure CLI'
       uses: azure/login@v1
       with:

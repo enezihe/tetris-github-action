@@ -33,7 +33,7 @@ variable "app_service_sku" {
 }
 
 variable "web_app_name" {
-  description = "Name of the Web App"
+  description = "Name of the Web App."
   type = string
   default = "ccseyhan-webapp"
 }

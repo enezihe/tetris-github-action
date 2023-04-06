@@ -26,6 +26,7 @@ jobs:
     name: 'Terraform Plan'
     runs-on: ubuntu-latest
     env:
+      working-directory: infrastructure
       #this is needed since we are running terraform with read-only permissions
       ARM_SKIP_PROVIDER_REGISTRATION: true
     outputs:
@@ -44,12 +45,14 @@ jobs:
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      run: terraform -chdir=infrastructure/ init
+      run: terraform init
+      working-directory: ${{ env.working-directory }}
             
     # Checks that all Terraform configuration files adhere to a canonical format
     # Will fail the build if not
     - name: Terraform Format
       run: terraform fmt -check
+      
 
     # Generates an execution plan for Terraform
     # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
@@ -59,7 +62,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       run: |
         export exitcode=0
-        terraform -chdir=infrastructure/ plan -lock=false -detailed-exitcode -no-color -out tfplan || export exitcode=$?
+        terraform plan -lock=false -detailed-exitcode -no-color -out tfplan || export exitcode=$?
 
         echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
         
@@ -69,21 +72,19 @@ jobs:
         else 
           exit 0
         fi
+        working-directory: ${{ env.working-directory }}
         
     # Save plan to artifacts  
     - name: Publish Terraform Plan
       uses: actions/upload-artifact@v3
       with:
         name: tfplan
-        path: tfplan
-        
+        path: infrastracture/
     # Create string output of Terraform Plan
     - name: Create String Output
       id: tf-plan-string
-      run: | 
-        cd infrastructure
+      run: |
         TERRAFORM_PLAN=$(terraform show -no-color tfplan)
-        
         delimiter="$(openssl rand -hex 8)"
         echo "summary<<${delimiter}" >> $GITHUB_OUTPUT
         echo "## Terraform Plan Output" >> $GITHUB_OUTPUT
@@ -99,8 +100,7 @@ jobs:
     - name: Publish Terraform Plan to Task Summary
       env:
         SUMMARY: ${{ steps.tf-plan-string.outputs.summary }}
-      run: |
-        cd infrastructure
+      run: 
         echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
       
     # If this is a PR post the changes
@@ -138,7 +138,7 @@ jobs:
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      run: terraform -chdir=infrastructure/ init
+      run: terraform init
 
     # Download saved plan from artifacts  
     - name: Download Terraform Plan

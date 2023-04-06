@@ -26,7 +26,7 @@ jobs:
     name: 'Terraform Plan'
     runs-on: ubuntu-latest
     env:
-      working-directory: infrastructure
+      working-directory: infrastructure/
       #this is needed since we are running terraform with read-only permissions
       ARM_SKIP_PROVIDER_REGISTRATION: true
     outputs:
@@ -58,6 +58,7 @@ jobs:
     # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
     - name: Terraform Plan
       id: tf-plan
+      working-directory: ${{ env.working-directory }}
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       run: |
@@ -72,7 +73,6 @@ jobs:
         else 
           exit 0
         fi
-        working-directory: ${{ env.working-directory }}
         
     # Save plan to artifacts  
     - name: Publish Terraform Plan

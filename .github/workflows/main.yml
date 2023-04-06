@@ -157,15 +157,15 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       run: terraform apply -auto-approve tfplan
       working-directory: ${{ env.working-directory }}
+    - name: Sleep for 30 seconds
+      run: sleep 30s
+      shell: bash
+    
 
   build-and-deploy:
     runs-on: ubuntu-latest
     needs: [terraform-apply]
     steps:
-    
-    - name: Sleep for 30 seconds
-      run: sleep 30s
-      shell: bash
     
     - uses: actions/checkout@v3
     

@@ -247,7 +247,7 @@ jobs:
         retry_wait_seconds: 30
         retry_on: error
         command: docker push ${{ secrets.ACR_USERNAME }}.azurecr.io/tetris:${{ github.sha }}
-        continue_on_error: true
+        continue_on_error: false
 
 
 

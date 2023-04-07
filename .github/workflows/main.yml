@@ -194,7 +194,18 @@ jobs:
         max_attempts: 5
         retry_wait_seconds: 30
         retry_on: error
-        command: docker push ${{ secrets.ACR_USERNAME }}.azurecr.io/tetris:${{ github.sha }}   
+        command: docker push ${{ secrets.ACR_USERNAME }}.azurecr.io/tetris:${{ github.sha }}
+        continue_on_error: true
+        
+    - uses: nick-fields/retry@v2
+      with:
+        timeout_seconds: 60
+        max_attempts: 5
+        retry_wait_seconds: 30
+        retry_on: error
+        command: docker push ${{ secrets.ACR_USERNAME }}.azurecr.io/tetris:${{ github.sha }}
+        continue_on_error: false
+
 
     - name: 'Login via Azure CLI'
       uses: azure/login@v1

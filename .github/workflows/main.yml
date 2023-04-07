@@ -184,28 +184,35 @@ jobs:
         login-server: ${{ secrets.ACR_USERNAME }}.azurecr.io
         username: ${{ secrets.ACR_USERNAME }}
         password: ${{ secrets.ACR_PASSWORD }}
+        
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+    - name: Build and push
+      uses: docker/build-push-action@v4
+      with:
+          push: true
+          tags: ${{ secrets.ACR_USERNAME }}.azurecr.io/tetris:${{ github.sha }}
 
-    - run: docker info | grep Username
         
-    - run: docker build . -t ${{ secrets.ACR_USERNAME }}.azurecr.io/tetris:${{ github.sha }}      
-        
-    - uses: nick-fields/retry@v2
-      with:
-        timeout_seconds: 60
-        max_attempts: 5
-        retry_wait_seconds: 30
-        retry_on: error
-        command: docker push ${{ secrets.ACR_USERNAME }}.azurecr.io/tetris:${{ github.sha }}
-        continue_on_error: true
-        
-    - uses: nick-fields/retry@v2
-      with:
-        timeout_seconds: 60
-        max_attempts: 5
-        retry_wait_seconds: 30
-        retry_on: error
-        command: docker push ${{ secrets.ACR_USERNAME }}.azurecr.io/tetris:${{ github.sha }}
-        continue_on_error: false
+#    - run: docker build . -t ${{ secrets.ACR_USERNAME }}.azurecr.io/tetris:${{ github.sha }}      
+#        
+#    - uses: nick-fields/retry@v2
+#       with:
+#        timeout_seconds: 60
+#        max_attempts: 5
+#        retry_wait_seconds: 30
+#        retry_on: error
+#        command: docker push ${{ secrets.ACR_USERNAME }}.azurecr.io/tetris:${{ github.sha }}
+#        continue_on_error: true
+#        
+#    - uses: nick-fields/retry@v2
+#      with:
+#        timeout_seconds: 60
+#        max_attempts: 5
+#        retry_wait_seconds: 30
+#        retry_on: error
+#        command: docker push ${{ secrets.ACR_USERNAME }}.azurecr.io/tetris:${{ github.sha }}
+#        continue_on_error: false
 
 
 

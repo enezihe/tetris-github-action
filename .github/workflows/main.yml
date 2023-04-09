@@ -26,7 +26,7 @@ jobs:
   terraform-plan:
     name: 'Terraform Plan'
     runs-on: ubuntu-latest
-    environment: ${{ env.MY_ENVIRONMENT }}
+    environment: ${{ vars.MY_ENVIRONMENT }}
     env:
       working-directory: infrastructure/
       #this is needed since we are running terraform with read-only permissions

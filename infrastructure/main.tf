@@ -55,9 +55,16 @@ resource "azurerm_linux_web_app" "app1" {
   site_config {}
 }
 
-resource "github_actions_secret" "acr_password" {
+# resource "github_actions_secret" "acr_password" {
+#   repository      = var.github_repo_name
+#   secret_name     = "ACR_PASSWORD"
+#   plaintext_value = azurerm_container_registry.acr.admin_password
+# }
+
+resource "github_actions_environment_secret" "example_secret" {
   repository      = var.github_repo_name
-  secret_name     = "ACR_PASSWORD"
+  environment       = "acr_env"
+  secret_name       = "ACR_PASSWORD"
   plaintext_value = azurerm_container_registry.acr.admin_password
 }
 

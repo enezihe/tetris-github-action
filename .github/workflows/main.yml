@@ -164,6 +164,7 @@ jobs:
     
   docker-build-and-deploy:
     runs-on: ubuntu-latest
+    environment: acr_env
     needs: [terraform-apply]
     steps:
     

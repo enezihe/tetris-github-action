@@ -9,11 +9,11 @@ provider "github" {
 terraform {
   required_providers {
     azurerm = {
-      source = "hashicorp/azurerm"
+      source  = "hashicorp/azurerm"
       version = "3.50.0"
     }
-     github = {
-      source = "integrations/github"
+    github = {
+      source  = "integrations/github"
       version = "5.20.0"
     }
   }
@@ -57,21 +57,21 @@ resource "azurerm_linux_web_app" "app1" {
 
 resource "github_actions_environment_secret" "acr_password" {
   repository      = var.github_repo_name
-  environment       = "acr_env"
-  secret_name       = "ACR_PASSWORD"
+  environment     = "acr_env"
+  secret_name     = "ACR_PASSWORD"
   plaintext_value = azurerm_container_registry.acr.admin_password
 }
 
 resource "github_actions_environment_variable" "github_env_rg" {
-  repository       = var.github_repo_name
-  environment      = "acr_env"
-  variable_name    = "RESOURCEGROUP"
-  value            = azurerm_resource_group.rg1.name
+  repository    = var.github_repo_name
+  environment   = "acr_env"
+  variable_name = "RESOURCEGROUP"
+  value         = azurerm_resource_group.rg1.name
 }
 
 resource "github_actions_environment_variable" "github_env_webapp" {
-  repository       = var.github_repo_name
-  environment      = "acr_env"
-  variable_name    = "WEBAPP"
-  value            = azurerm_linux_web_app.app1.name
+  repository    = var.github_repo_name
+  environment   = "acr_env"
+  variable_name = "WEBAPP"
+  value         = azurerm_linux_web_app.app1.name
 }
